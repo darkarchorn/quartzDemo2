@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,16 @@ import java.util.List;
 @RequestMapping("/api")
 public class MainController {
     List<MyThread> list = new ArrayList<>();
+    long start = System.currentTimeMillis();
+
+    public String formatTime(long time) {
+        Duration duration = Duration.ofMillis(time);
+        long seconds = duration.getSeconds();
+        long HH = seconds / 3600;
+        long MM = (seconds % 3600) / 60;
+        long SS = seconds % 60;
+        return String.format("%02d:%02d:%02d", HH, MM, SS);
+    }
 
     @GetMapping("/main")
     public String main() throws InterruptedException {
@@ -30,7 +41,7 @@ public class MainController {
         for(int i=0; i<10; i++) {
             siz += list.get(i).getNumber().size();
         }
-        return (int) siz + "/100000\n" + siz/(100000) +"%";
+        return (int) siz + "/100000\n" + siz/(100000) +"%\nTime elapsed: " + formatTime(System.currentTimeMillis()-start);
     }
 
 }

@@ -51,11 +51,9 @@ public class MyThread implements Runnable {
         } catch (InterruptedException e) {
             System.out.println("Thread " +  id + " interrupted.");
         }
-        System.out.println("Thread " +  id + " exiting.");
     }
 
     public void start () {
-        System.out.println("Starting thread " +  id );
         if (t == null) {
             t = new Thread (this, String.valueOf(id));
             t.start ();
