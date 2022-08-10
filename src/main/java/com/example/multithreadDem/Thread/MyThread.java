@@ -48,6 +48,7 @@ public class MyThread implements Runnable {
                 number.add(i);
                 Thread.sleep(20);
             }
+            Thread.interrupted();
         } catch (InterruptedException e) {
             System.out.println("Thread " +  id + " interrupted.");
         }

@@ -26,6 +26,7 @@ public class MainController {
 
     @GetMapping("/main")
     public String main() throws InterruptedException {
+        if(list.size()>0) return "ANOTHER API IS RUNNING!";
         start = System.currentTimeMillis();
         for(int i=0; i<10; i++) {
             list.add(new MyThread(i+1));
