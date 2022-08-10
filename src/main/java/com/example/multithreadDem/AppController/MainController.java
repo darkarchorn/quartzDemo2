@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class MainController {
     List<MyThread> list = new ArrayList<>();
-    long start = System.currentTimeMillis();
+    long start;
 
     public String formatTime(long time) {
         Duration duration = Duration.ofMillis(time);
@@ -26,6 +26,7 @@ public class MainController {
 
     @GetMapping("/main")
     public String main() throws InterruptedException {
+        start = System.currentTimeMillis();
         for(int i=0; i<10; i++) {
             list.add(new MyThread(i+1));
         }
@@ -41,7 +42,7 @@ public class MainController {
         for(int i=0; i<10; i++) {
             siz += list.get(i).getNumber().size();
         }
-        return (int) siz + "/100000\n" + siz/(100000) +"%\nTime elapsed: " + formatTime(System.currentTimeMillis()-start);
+        return (int) siz + "/100000\n" + siz/(1000) +"%\nTime elapsed: " + formatTime(System.currentTimeMillis()-start);
     }
 
 }

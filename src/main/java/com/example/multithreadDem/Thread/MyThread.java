@@ -44,7 +44,7 @@ public class MyThread implements Runnable {
         System.out.println("Running thread " + id);
         number = new ArrayList<>();
         try {
-            for(Integer i = (id-1)*10000; i < id*100000; i++) {
+            for(Integer i = (id-1)*10000; i < id*10000; i++) {
                 number.add(i);
                 Thread.sleep(20);
             }
