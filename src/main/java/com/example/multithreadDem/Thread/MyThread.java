@@ -6,6 +6,15 @@ import java.util.List;
 public class MyThread implements Runnable {
     private List<Integer> number;
     private int id;
+    boolean workDone;
+
+    public boolean isWorkDone() {
+        return workDone;
+    }
+
+    public void setWorkDone(boolean workDone) {
+        this.workDone = workDone;
+    }
 
     public List<Integer> getNumber() {
         return number;
@@ -46,8 +55,9 @@ public class MyThread implements Runnable {
         try {
             for(Integer i = (id-1)*10000; i < id*10000; i++) {
                 number.add(i);
-                Thread.sleep(20);
+                Thread.sleep(1);
             }
+            System.out.println("Work of thread " + id +" done!");
             Thread.interrupted();
         } catch (InterruptedException e) {
             System.out.println("Thread " +  id + " interrupted.");

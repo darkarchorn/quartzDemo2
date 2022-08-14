@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -40,10 +41,18 @@ public class MainController {
     @GetMapping("/per")
     public String per() {
         double siz = 0;
+        if(list.isEmpty()) {
+            return "No job is being executed!";
+        }
         for(int i=0; i<10; i++) {
             siz += list.get(i).getNumber().size();
         }
-        return (int) siz + "/100000\n" + siz/(1000) +"%\nTime elapsed: " + formatTime(System.currentTimeMillis()-start);
+        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
+        int threadCount = threadGroup.activeCount();
+        Thread threadList[] = new Thread[threadCount];
+        if(siz == 100000.0) list.clear();
+        String s =(int) siz + "/100000\n" + siz/(1000) +"%\nTime elapsed: " + formatTime(System.currentTimeMillis()-start)
+                +"\nNumber of thread activating: " + Thread.activeCount() + "\n";
+        return s;
     }
-
 }
