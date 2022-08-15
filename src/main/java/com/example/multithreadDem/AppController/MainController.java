@@ -57,7 +57,7 @@ public class MainController {
         String s = (int) siz + "/" + totalWork + "\n" + siz / (totalWork / 100) + "%\nTime elapsed: "
                 + formatTime(System.currentTimeMillis() - start)
                 + "\nNumber of thread activating: " + Thread.activeCount()
-                + "\n" + (siz == totalWork ? "Work done! Restarting..." : "");
+                + (siz == totalWork ? "\nWork done! Restarting..." : "");
         return s;
     }
 }
