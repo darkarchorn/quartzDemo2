@@ -27,12 +27,12 @@ public class MainController {
 
     @GetMapping("/main")
     public String main() throws InterruptedException {
-        if(list.size()>0) return "ANOTHER API IS RUNNING!";
+        if (list.size() > 0) return "ANOTHER API IS RUNNING!";
         start = System.currentTimeMillis();
-        for(int i=0; i<10; i++) {
-            list.add(new MyThread(i+1));
+        for (int i = 0; i < 10; i++) {
+            list.add(new MyThread(i + 1));
         }
-        for (int i=0; i<list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             list.get(i).start();
         }
         return "SUCCEED";
@@ -40,19 +40,24 @@ public class MainController {
 
     @GetMapping("/per")
     public String per() {
-        double siz = 0;
-        if(list.isEmpty()) {
+        if (list.isEmpty()) {
             return "No job is being executed!";
         }
-        for(int i=0; i<10; i++) {
+        double siz = 0;
+        int numberOfThread = 10;
+        int workPerThread = list.get(0).getWork();
+        int totalWork = numberOfThread * workPerThread;
+        for (int i = 0; i < numberOfThread; i++) {
             siz += list.get(i).getNumber().size();
         }
         ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
         int threadCount = threadGroup.activeCount();
         Thread threadList[] = new Thread[threadCount];
-        if(siz == 100000.0) list.clear();
-        String s =(int) siz + "/100000\n" + siz/(1000) +"%\nTime elapsed: " + formatTime(System.currentTimeMillis()-start)
-                +"\nNumber of thread activating: " + Thread.activeCount() + "\n";
+        if (siz == (double) numberOfThread * list.get(0).getWork()) list.clear();
+        String s = (int) siz + "/" + totalWork + "\n" + siz / (totalWork / 100) + "%\nTime elapsed: "
+                + formatTime(System.currentTimeMillis() - start)
+                + "\nNumber of thread activating: " + Thread.activeCount()
+                + "\n" + (siz == totalWork ? "Work done! Restarting..." : "");
         return s;
     }
 }

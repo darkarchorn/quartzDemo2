@@ -4,28 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyThread implements Runnable {
+    int work;
     private List<Integer> number;
     private int id;
-    boolean workDone;
-
-    public boolean isWorkDone() {
-        return workDone;
+    public int getWork() {
+        return work;
     }
-
-    public void setWorkDone(boolean workDone) {
-        this.workDone = workDone;
+    public void setWork(int work) {
+        this.work = work;
     }
-
     public List<Integer> getNumber() {
         return number;
     }
-
     public void setNumber(List<Integer> number) {
         this.number = number;
     }
-
     private Thread t;
-
     public int getId() {
         return id;
     }
@@ -51,9 +45,10 @@ public class MyThread implements Runnable {
     @Override
     public void run() {
         System.out.println("Running thread " + id);
+        this.setWork(10000);
         number = new ArrayList<>();
         try {
-            for(Integer i = (id-1)*10000; i < id*10000; i++) {
+            for(Integer i = (id-1)*getWork(); i < id*getWork(); i++) {
                 number.add(i);
                 Thread.sleep(1);
             }
