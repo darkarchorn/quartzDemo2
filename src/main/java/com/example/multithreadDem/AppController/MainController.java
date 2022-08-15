@@ -45,10 +45,13 @@ public class MainController {
         }
         double siz = 0;
         int numberOfThread = 10;
+        int workDoneByAThread[] = new int[numberOfThread];
+        String progress ="";
         int workPerThread = list.get(0).getWork();
         int totalWork = numberOfThread * workPerThread;
         for (int i = 0; i < numberOfThread; i++) {
             siz += list.get(i).getNumber().size();
+            progress += "\nThread " + (i+1) + ": " + list.get(i).getNumber().size() + "/" + list.get(i).getWork();
         }
         ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
         int threadCount = threadGroup.activeCount();
@@ -57,6 +60,7 @@ public class MainController {
         String s = (int) siz + "/" + totalWork + "\n" + siz / (totalWork / 100) + "%\nTime elapsed: "
                 + formatTime(System.currentTimeMillis() - start)
                 + "\nNumber of thread activating: " + Thread.activeCount()
+                + progress
                 + (siz == totalWork ? "\nWork done! Restarting..." : "");
         return s;
     }
