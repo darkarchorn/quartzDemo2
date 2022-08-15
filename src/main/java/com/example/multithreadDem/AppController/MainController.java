@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -15,7 +14,8 @@ import java.util.List;
 public class MainController {
     List<MyThread> list = new ArrayList<>();
     long start;
-
+    boolean done = false;
+    static final int numberOfThread = 10;
     public String formatTime(long time) {
         Duration duration = Duration.ofMillis(time);
         long seconds = duration.getSeconds();
@@ -27,13 +27,21 @@ public class MainController {
 
     @GetMapping("/main")
     public String main() throws InterruptedException {
+        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
+        if(threadGroup.activeCount()==28) {
+            list.clear();
+        }
         if (list.size() > 0) return "ANOTHER API IS RUNNING!";
+        if(done) {
+            list.clear();
+            done = false;
+        }
         start = System.currentTimeMillis();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < numberOfThread; i++) {
             list.add(new MyThread(i + 1));
         }
-        for (int i = 0; i < list.size(); i++) {
-            list.get(i).start();
+        for (MyThread thread : list) {
+            thread.start();
         }
         return "SUCCEED";
     }
@@ -43,8 +51,7 @@ public class MainController {
         if (list.isEmpty()) {
             return "No job is being executed!";
         }
-        double siz = 0;
-        int numberOfThread = 10;
+        int siz = 0;
         int workDoneByAThread[] = new int[numberOfThread];
         String progress ="";
         int workPerThread = list.get(0).getWork();
@@ -56,8 +63,11 @@ public class MainController {
         ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
         int threadCount = threadGroup.activeCount();
         Thread threadList[] = new Thread[threadCount];
-        if (siz == (double) numberOfThread * list.get(0).getWork()) list.clear();
-        String s = (int) siz + "/" + totalWork + "\n" + siz / (totalWork / 100) + "%\nTime elapsed: "
+        if (siz == (double) numberOfThread * list.get(0).getWork()) {
+            list.clear();
+            done = true;
+        }
+        String s = siz + "/" + totalWork + "\n" + siz / (totalWork / 100) + "%\nTime elapsed: "
                 + formatTime(System.currentTimeMillis() - start)
                 + "\nNumber of thread activating: " + Thread.activeCount()
                 + progress
